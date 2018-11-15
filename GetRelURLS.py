@@ -86,6 +86,7 @@ scriptdict = {
     "Alma":"bofm/alma/",
     "Helaman":"bofm/hel/",
     "3 Nephi": "bofm/3-ne/",
+    "3rd Nephi": "bofm/3-ne/",
     "4 Nephi": "bofm/4-ne/",
     "Mormon":"bofm/morm/",
     "Ether":"bofm/ether/",
@@ -138,10 +139,22 @@ def url_maker(book,rest,url_list):
         url_list.append(url + "1" + '\n')
     elif ':' not in rest:
         if '-' not in rest:
-            url_list.append(url + rest.strip() + '\n')
+            if ',' not in rest:
+                url_list.append(url + rest.strip() + '\n')
+            else:
+                for i in rest.strip().split(','):
+                    url_list.append(url + i + '\n')
         else:
-            for i in range(int(rest.strip()[0]),int(rest.strip()[2::])+1):
-                url_list.append(url + str(i) + '\n')
+            if ',' not in rest:
+                for i in range(int(rest.strip().split('-')[0]),int(rest.strip().split('-')[1])+1):
+                    url_list.append(url + str(i) + '\n')
+            else:
+                for j in rest.strip().split(','):
+                    if '-' in j:
+                        for i in range(int(j.strip().split('-')[0]),int(j.strip().split('-')[1])+1):
+                            url_list.append(url + str(i) + '\n')
+                    else:
+                        url_list.append(url + j.strip() + '\n')
     else:
         url_list.append(url + rest.split(':')[0].strip() + '.' + rest.split(':')[1].strip() + '\n')
 
@@ -154,6 +167,7 @@ def main():
         rfilename = input("Please enter the filename of the file to be opened: ")
         wfilename = input("Please enter the filename of the file to be written to: ")
     read_file(rfilename,url_list)
+    #print(url_list)
     write_file(wfilename,url_list)
 
 
